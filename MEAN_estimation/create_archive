@@ -1,0 +1,1 @@
+tar -zcf Gauss_experiments_Octave_scripts.tgz README.txt comparison_exp.m mtt_cst.m mtt_stb.m stb_shrink_means.m generate_means.m 
