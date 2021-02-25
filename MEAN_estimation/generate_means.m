@@ -41,7 +41,7 @@ function mu = generate_means(varargin)
 
   case 3
     %% model 3: uniform means in lower dimension
-    mu = [ muspread*2*(rand(N,mudim)-0.5*(1-shift)) zeros(N,d-mudim)];
+    mu = [ muspread*(2*(rand(N,mudim)-0.5)+shift) zeros(N,d-mudim)];
 
   case 4
     %% model 4: sparse uniform means (with shift to set off simple shrinkage)
@@ -49,7 +49,7 @@ function mu = generate_means(varargin)
     mu = zeros(N,d);
     
     for (i=1:N)
-      mu(i,randperm(d,mudim)) = muspread*2*(rand(1,mudim)-0.5*(1-shift));
+      mu(i,randperm(d,mudim)) = muspread*(2*(rand(1,mudim)-0.5) +shift);
     endfor
 
   case 5
