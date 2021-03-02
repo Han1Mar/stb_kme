@@ -1,8 +1,10 @@
 """
 ---------------------------------------------------
 This code is part of the AISTATS 2021 submission:
->>> High-Dimensional Multi-Task Averaging and 
-    Application to Kernel Mean Embedding <<<
+>>> Marienwald, Hannah, Fermanian, Jean-Baptiste & Blanchard, Gilles.
+    "High-Dimensional Multi-Task Averaging and Application to Kernel 
+    Mean Embedding." In International Conference on Artificial 
+    Intelligence and Statistics. PMLR, 2021. <<<
 ---------------------------------------------------
 MODEL_STB_weight.py:
     - performs model optimization 
@@ -12,24 +14,23 @@ MODEL_STB_weight.py:
 import sys
 sys.path.append('../')
 import utiels as u
+import TOY_settings as s
 import numpy as np
 import scipy.io as io
 
-differentNrBags = 'differentNrBags'
-differentBagsizes = 'differentBagsizes'
-clustered = 'clustered'
+differentNrBags = s.differentNrBags
+differentBagsizes = s.differentBagsizes
+clustered = s.clustered
 
 assert(len(sys.argv) == 2)
 experiment = sys.argv[1]
 assert(experiment==differentNrBags or experiment==differentBagsizes or experiment==clustered)
 
+unbiased    = s.unbiased         # unbiased estimation of the MMD^2
+replace     = s.replace          # replace negative values of MMD^2 with zero 
+num_trials  = s.num_trials_model # number of trials
+
 ### update as desired ########################################################
-unbiased    = True          # unbiased estimation of the MMD^2
-replace     = True          # replace negative values of MMD^2 with zero 
-kernel = u.Gaussiankernel   # kernel 
-kw1    = 2.25               # kernel width
-num_trials = 200            # number of trials
-                                    
 # load optimal parameter values from past model optimization
 load_param        = {'Zeta': False, 'Gamma': False}
 # check every possible value for the specified model parameter in first setting
@@ -53,19 +54,19 @@ Gamma = np.linspace(0., 1., num_modelparams['Gamma']) # can only between 0 and 1
 if experiment == differentNrBags:
     n = 50
     lastbest_idx = {'Zeta': 0, 'Gamma': 10}  # Zeta:1.0,  Gamma: 0.5
-    FN = '../Results/differentNrBags_kme/NaiveData/'
-    setting_range = np.array([10,20,30,40,50,60,70,80,90,100,120,140,160,180,200,250,300])
+    FN = s.FN_model_NrBags
+    setting_range = s.setting_range
 elif experiment == differentBagsizes:
     T = 50
     lastbest_idx = {'Zeta': 5, 'Gamma': 10} # Zeta:0.48 , Gamma: 0.5
-    FN = '../Results/differentBagsizes_kme/NaiveData/'
-    setting_range = np.array([10,20,30,40,50,60,70,80,90,100,120,140,160,180,200,250,300])
+    FN = s.FN_model_Bagsizes
+    setting_range = s.setting_range
 elif experiment == clustered:
     T = 50
     N = [50]*T
     lastbest_idx = {'Zeta': 13, 'Gamma': 10} # Zeta:1.3 , Gamma: 0.5
-    FN = '../Results/clustered_kme/NaiveData/'
-    setting_range = np.linspace(0,5,21)
+    FN = s.FN_model_Clustered
+    setting_range = s.setting_range_Clustered
     
 num_settings = len(setting_range)
 

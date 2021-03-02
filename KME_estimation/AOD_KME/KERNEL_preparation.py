@@ -1,8 +1,10 @@
 """
 ---------------------------------------------------
 This code is part of the AISTATS 2021 submission:
->>> High-Dimensional Multi-Task Averaging and 
-    Application to Kernel Mean Embedding <<<
+>>> Marienwald, Hannah, Fermanian, Jean-Baptiste & Blanchard, Gilles.
+    "High-Dimensional Multi-Task Averaging and Application to Kernel 
+    Mean Embedding." In International Conference on Artificial 
+    Intelligence and Statistics. PMLR, 2021. <<<
 ---------------------------------------------------
 KERNEL_preparation.py:
     - precomputes the kernels such that every method can be applied on the
@@ -11,24 +13,22 @@ KERNEL_preparation.py:
 import sys
 sys.path.append('../')
 import utiels as u
+import AOD_settings as s
 import numpy as np
 import os
 from scipy.io import loadmat
 
+unbiased    = s.unbiased      # unbiased estimation of the MMD^2
+replace     = s.replace       # replace negative values of MMD^2 with zero 
+kw1_A           = s.kw1_A     # kernel width (used for Gaussian kernel)
+subsample_size  = s.subsample_size      # number of observations used to estimate the KMEs
+num_trials      = s.num_trials          # number of trials (repetitions of experiments)
+FN_XA       = s.FN_Datapath+'X_A.mat'   # where the data set is stored
+FN_trial    = s.FN_trial                # where the results will be saved
+
 ### update as desired ########################################################
-unbiased    = True       # unbiased estimation of the MMD^2
-replace     = True       # replace negative values of MMD^2 with zero 
-kw1_A           = 1.     # kernel width
-subsample_size  = 20     # number of observations used to estimate the KMEs
-num_trials      = 100    # number of trials (repetitions of experiments)
-
 kernel = u.Gaussiankernel                       # kernel
-
-FN          = '../Results/aod_kme/Kernels/'     # where to save the kernel ...
-FN_A        = FN+'kernel1_A/'                   # ... matrices
-FN_Datapath = '../Results/aod_kme/Data/'        # where the data set is saved
-FN_XA       = FN_Datapath+'X_A.mat'
-FN_trial    = '../Results/aod_kme/TrialData/'
+# kernel = u.Linearkernel
 ##############################################################################
 
 # load the data

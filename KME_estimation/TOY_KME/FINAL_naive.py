@@ -1,8 +1,10 @@
 """
 ---------------------------------------------------
 This code is part of the AISTATS 2021 submission:
->>> High-Dimensional Multi-Task Averaging and 
-    Application to Kernel Mean Embedding <<<
+>>> Marienwald, Hannah, Fermanian, Jean-Baptiste & Blanchard, Gilles.
+    "High-Dimensional Multi-Task Averaging and Application to Kernel 
+    Mean Embedding." In International Conference on Artificial 
+    Intelligence and Statistics. PMLR, 2021. <<<
 ---------------------------------------------------
 FINAL_naive.py:
     - creates the data for the final estimation of the generalized KME
@@ -11,38 +13,36 @@ FINAL_naive.py:
 import sys
 sys.path.append('../')
 import utiels as u
+import TOY_settings as s
 import numpy as np
 import os
 import scipy.io as io
 
 assert(len(sys.argv) == 2)
-differentNrBags = (sys.argv[1] == 'differentNrBags')
+differentNrBags = (sys.argv[1] == s.differentNrBags)
 
-### update as desired ########################################################
-unbiased    = True          # unbiased estimation of the MMD^2
-replace     = True          # replace negative values of MMD^2 with zero 
-kernel = u.Gaussiankernel   # kernel 
-kw1    = 2.25               # kernel width
-num_trials = 200            # number of trials
+unbiased    = s.unbiased         # unbiased estimation of the MMD^2
+replace     = s.replace          # replace negative values of MMD^2 with zero 
+kernel = u.Gaussiankernel        # kernel 
+kw1    = s.kw1                   # kernel width
+num_trials = s.num_trials_model  # number of trials
 
 # values that shall be tested in the setting
-setting_range = np.array([10,20,30,40,50,60,70,80,90,100,120,140,160,180,200,250,300])
+setting_range = s.setting_range
 num_settings = len(setting_range)
 
-NZ      = int(1000)                 # number of sampler (test data) per task
-mu     = [0,0]                      # center of each task
-S      = np.array([[1,0],[0,10]])   # covariance matrix which will be ...
-                                    # ... randomly rotated
-##############################################################################
+NZ     = s.NZ  # number of sampler (test data) per task
+mu     = s.mu  # center of each task
+S      = s.S   # covariance matrix which will be randomly rotated
 
 if differentNrBags:
     n = 50
-    FN_save = '../Results/differentNrBags_kme/FinalData/'
-    FN_load = '../Results/differentNrBags_kme/NaiveData/'
+    FN_save = s.FN_final_NrBags
+    FN_load = s.FN_model_NrBags
 else:
     T = 50
-    FN_save = '../Results/differentBagsizes_kme/FinalData/'
-    FN_load = '../Results/differentBagsizes_kme/NaiveData/'
+    FN_save = s.FN_final_Bagsizes
+    FN_load = s.FN_model_Bagsizes
 
 KME_error  = {'Error': np.zeros(num_settings), 'std': np.zeros(num_settings)}
 

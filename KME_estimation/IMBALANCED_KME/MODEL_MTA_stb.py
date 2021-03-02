@@ -1,8 +1,10 @@
 """
 ---------------------------------------------------
 This code is part of the AISTATS 2021 submission:
->>> High-Dimensional Multi-Task Averaging and 
-    Application to Kernel Mean Embedding <<<
+>>> Marienwald, Hannah, Fermanian, Jean-Baptiste & Blanchard, Gilles.
+    "High-Dimensional Multi-Task Averaging and Application to Kernel 
+    Mean Embedding." In International Conference on Artificial 
+    Intelligence and Statistics. PMLR, 2021. <<<
 ---------------------------------------------------
 MODEL_MTA_stb.py:
     - model optimization on the training data
@@ -10,20 +12,17 @@ MODEL_MTA_stb.py:
 import sys
 sys.path.append('../')
 import utiels as u
+import IMBALANCED_settings as s
 import numpy as np
 import scipy.io as io
 
+unbiased   = s.unbiased          # unbiased estimation of the MMD^2
+replace    = s.replace           # replace negative values of MMD^2 with zero 
+num_trials = s.num_trials_model  # number of trials
+T          = s.T                 # number of tasks (bags)
+FN         = s.FN_model          # where to save the data, results
+
 ### update as desired ########################################################
-unbiased    = True          # unbiased estimation of the MMD^2
-replace     = True          # replace negative values of MMD^2 with zero 
-kernel = u.Gaussiankernel   # kernel 
-kw1    = 2.25               # kernel width
-num_trials = 100            # number of trials
-
-FN = '../Results/imbalanced_kme/NaiveData/' # where to save the data, results
-
-T  = 50             # number of tasks (bags)
-
 num_modelparams = {'Zeta': 41, 'Gamma': 41}
 Zeta  = np.linspace(0.,    10., num_modelparams['Zeta'])
 Gamma = np.linspace(0., 10000., num_modelparams['Gamma'])

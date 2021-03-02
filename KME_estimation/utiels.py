@@ -1,8 +1,10 @@
 """
 ---------------------------------------------------
 This code is part of the AISTATS 2021 submission:
->>> High-Dimensional Multi-Task Averaging and 
-    Application to Kernel Mean Embedding <<<
+>>> Marienwald, Hannah, Fermanian, Jean-Baptiste & Blanchard, Gilles.
+    "High-Dimensional Multi-Task Averaging and Application to Kernel 
+    Mean Embedding." In International Conference on Artificial 
+    Intelligence and Statistics. PMLR, 2021. <<<
 ---------------------------------------------------
 """
 import numpy as np
@@ -23,6 +25,63 @@ def Gaussiankernel(X, Y, sigma):
     K = np.exp(distance_matrix(X,Y)**2 / ((-2.)*sigma**2))
     return K
 
+def Linearkernel(X,Y,_):
+    """Compute the linear kernel for the given data.
+
+    Args:
+      X: (N,D) array, N observations of D dimensions
+      Y: (M,D) array, M observations of D dimensions
+
+    Returns:
+      K: (N,M) array, kernel matrix where (K)_n,m = <x_n, y_m>
+    """
+    K = np.dot(X,Y.T)
+    return K
+
+def DNFkernel(X,Y,normalize,D):
+    """Compute the disjunctive normal form kernel for the given data. Computes
+    the number of bits (True, False) that are the same.
+
+    Args:
+      X: (N,D) array, N observations of D dimensions ([0,1] but not bool)
+      Y: (M,D) array, M observations of D dimensions ([0,1] but not bool)
+      normalize: bool, normalize kernel so that it is between 0 and 1
+      D: int, number of dimensions; used to normalize the kernel 
+
+    Returns:
+      K: (N,M) array, kernel matrix where (K)_n,m = 
+         -1 + 2**((<x_n, y_m> + <not(x_n),not(y_m)>)/D)
+         if normalize=False, the exponent is not divided by D
+    """
+    not_X = np.ones(D, dtype=int) - X
+    not_Y = np.ones(D, dtype=int) - Y
+    K = np.dot(X,Y.T) + np.dot(not_X, not_Y.T)
+    if normalize:
+        K = K / float(D)
+    K = -1. + 2**(K)
+    return K
+
+def MDNFkernel(X,Y,normalize,D):
+    """Compute the monotone disjunctive normal form kernel for the given data. 
+    Computes the number of Trues that are the same.
+
+    Args:
+      X: (N,D) array, N observations of D dimensions ([0,1] but not bool)
+      Y: (M,D) array, M observations of D dimensions ([0,1] but not bool)
+      normalize: bool, normalize kernel so that it is between 0 and 1, note
+                 that the kernel is only 1 iff all bits are 1 and equal
+      D: int, number of dimensions; used to normalize the kernel 
+
+    Returns:
+      K: (N,M) array, kernel matrix where (K)_n,m = 
+         -1 + 2**(<x_n, y_m>/D)
+         if normalize=False, the exponent is not divided by D
+    """
+    K = np.dot(X,Y.T)
+    if normalize:
+        K = K / float(D)
+    K = -1. + 2**(K)
+    return K
 
 ### MAIN FUNCTIONS ###########################################################
 def estimate_threshold(K, zeta):
@@ -358,6 +417,10 @@ def compute_MTA_similarity(G_naive, T, method, *args):
                        the naive estimations of the KMEs, see G_naive).
               'stb': uses the proposed similarity test (see 
                      compute_STB_neighbors(...)) as task relatedness.
+              'gauss': uses a Gaussian kernel to estimate the task similarity
+              'gaussvar': uses a Gaussian kernel to estimate the task
+                          similarity where the kernel width depends on the
+                          task_var
       args: model parameters needed for method:
             'const': []
             'stb': [zeta, est_MSE] where est_MSE is defined as the maximum 
@@ -370,7 +433,15 @@ def compute_MTA_similarity(G_naive, T, method, *args):
         a = 2./(1./(T*(T-1.))*np.sum(G_naive))
         A = np.ones((T,T))*a
     elif method == 'stb':
+        # args[0]: zeta, args[1]: task_var
         A = (G_naive <= args[0]*args[1][:,None])
+    elif method == 'gauss':
+        # args[0]: zeta
+        A = np.exp(G_naive / (-2.*args[0]))
+    elif method == 'gaussvar':
+        # args[0]: zeta, args[1]: task_var
+        temp = (G_naive.T/args[1]).T
+        A = np.exp(temp/ (-2.*args[0]))
     else:
         print('Unknown method in compute_MTA_similarity!')
         A = np.eye(T)

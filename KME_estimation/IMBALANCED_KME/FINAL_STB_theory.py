@@ -1,8 +1,10 @@
 """
 ---------------------------------------------------
 This code is part of the AISTATS 2021 submission:
->>> High-Dimensional Multi-Task Averaging and 
-    Application to Kernel Mean Embedding <<<
+>>> Marienwald, Hannah, Fermanian, Jean-Baptiste & Blanchard, Gilles.
+    "High-Dimensional Multi-Task Averaging and Application to Kernel 
+    Mean Embedding." In International Conference on Artificial 
+    Intelligence and Statistics. PMLR, 2021. <<<
 ---------------------------------------------------
 FINAL_STB_theory.py:
     - estimate generalization error using optimal parameter values 
@@ -11,22 +13,18 @@ FINAL_STB_theory.py:
 import sys
 sys.path.append('../')
 import utiels as u
+import IMBALANCED_settings as s
 import numpy as np
 import scipy.io as io
 
-### update as desired ########################################################
-unbiased    = True          # unbiased estimation of the MMD^2
-replace     = True          # replace negative values of MMD^2 with zero 
-save_neighs = True          # save the number of neighbors
-kernel = u.Gaussiankernel   # kernel 
-kw1    = 2.25               # kernel width
-num_trials = 200            # number of trials
+unbiased    = s.unbiased          # unbiased estimation of the MMD^2
+replace     = s.replace           # replace negative values of MMD^2 with zero 
+save_neighs = s.save_neighs       # save info about found neighbors
+num_trials  = s.num_trials_final  # number of trials
+T           = s.T                 # number of tasks (bags)
 
-FN_load = '../Results/imbalanced_kme/NaiveData/' # where to find opt. param.
-FN_save = '../Results/imbalanced_kme/FinalData/' # where to save the results
-
-T  = 50             # number of tasks (bags)
-##############################################################################
+FN_load = s.FN_model # where to find opt. param.
+FN_save = s.FN_final # where to save the results
 
 opt_param = io.loadmat(FN_load+'opt_param_STB_theory.mat')
 zeta       = opt_param['Zeta'][0,0]

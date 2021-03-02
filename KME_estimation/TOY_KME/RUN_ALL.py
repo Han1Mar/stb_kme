@@ -1,8 +1,10 @@
 """
 ---------------------------------------------------
 This code is part of the AISTATS 2021 submission:
->>> High-Dimensional Multi-Task Averaging and 
-    Application to Kernel Mean Embedding <<<
+>>> Marienwald, Hannah, Fermanian, Jean-Baptiste & Blanchard, Gilles.
+    "High-Dimensional Multi-Task Averaging and Application to Kernel 
+    Mean Embedding." In International Conference on Artificial 
+    Intelligence and Statistics. PMLR, 2021. <<<
 ---------------------------------------------------
 RUN_ALL.py:
     - runs every method (model optimization and final estimation) on
@@ -17,9 +19,10 @@ differentNrBags = 'differentNrBags'
 differentBagsizes = 'differentBagsizes'
 clustered = 'clustered'
 
-assert(len(sys.argv) == 2)
-experiment = sys.argv[1]
-assert(experiment==differentNrBags or experiment==differentBagsizes or experiment==clustered)
+#assert(len(sys.argv) == 2)
+#experiment = sys.argv[1]
+#assert(experiment==differentNrBags or experiment==differentBagsizes or experiment==clustered)
+experiment = clustered
 
 ## MODEL OPTIMIZATION 
 Methods = ['naive', 'STB', 'STB_weight', 'STB_theory', 'MTA_const', 'MTA_stb']

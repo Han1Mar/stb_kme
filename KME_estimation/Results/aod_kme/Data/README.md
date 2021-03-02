@@ -1,0 +1,2 @@
+Reference for MISR1 data set:              
+> Wang, Zhuang, Lan, Liang, and Vucetic, Slobodan. (2011). Mixture model for multiple instance regression and applications in remote sensing. *IEEE Transactions on Geoscience and Remote Sensing*, 50(6):2226–2237.

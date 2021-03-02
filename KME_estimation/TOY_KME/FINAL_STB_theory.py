@@ -1,8 +1,10 @@
 """
 ---------------------------------------------------
 This code is part of the AISTATS 2021 submission:
->>> High-Dimensional Multi-Task Averaging and 
-    Application to Kernel Mean Embedding <<<
+>>> Marienwald, Hannah, Fermanian, Jean-Baptiste & Blanchard, Gilles.
+    "High-Dimensional Multi-Task Averaging and Application to Kernel 
+    Mean Embedding." In International Conference on Artificial 
+    Intelligence and Statistics. PMLR, 2021. <<<
 ---------------------------------------------------
 FINAL_STB_theory.py:
     - performs model optimization 
@@ -13,42 +15,39 @@ FINAL_STB_theory.py:
 import sys
 sys.path.append('../')
 import utiels as u
+import TOY_settings as s
 import numpy as np
 import scipy.io as io
 
-differentNrBags = 'differentNrBags'
-differentBagsizes = 'differentBagsizes'
-clustered = 'clustered'
+differentNrBags = s.differentNrBags
+differentBagsizes = s.differentBagsizes
+clustered = s.clustered
 
 assert(len(sys.argv) == 2)
 experiment = sys.argv[1]
 assert(experiment==differentNrBags or experiment==differentBagsizes or experiment==clustered)
 
-### update as desired ########################################################
-unbiased    = True          # unbiased estimation of the MMD^2
-replace     = True          # replace negative values of MMD^2 with zero 
-save_neighs = True          # save info about neighbors
-kernel = u.Gaussiankernel   # kernel 
-kw1    = 2.25               # kernel width
-num_trials = 200            # number of trials
-##############################################################################
+unbiased    = s.unbiased         # unbiased estimation of the MMD^2
+replace     = s.replace          # replace negative values of MMD^2 with zero 
+save_neighs = s.save_neighs      # save info about found neighbors
+num_trials  = s.num_trials_final # number of trials
 
 if experiment == differentNrBags:
     n = 50
-    FN_save = '../Results/differentNrBags_kme/FinalData/'
-    FN_load = '../Results/differentNrBags_kme/NaiveData/'
-    setting_range = np.array([10,20,30,40,50,60,70,80,90,100,120,140,160,180,200,250,300])
+    FN_save = s.FN_final_NrBags
+    FN_load = s.FN_model_NrBags
+    setting_range = s.setting_range
 elif experiment == differentBagsizes:
     T = 50
-    FN_save = '../Results/differentBagsizes_kme/FinalData/'
-    FN_load = '../Results/differentBagsizes_kme/NaiveData/'
-    setting_range = np.array([10,20,30,40,50,60,70,80,90,100,120,140,160,180,200,250,300])
+    FN_save = s.FN_final_Bagsizes
+    FN_load = s.FN_model_Bagsizes
+    setting_range = s.setting_range
 elif experiment == clustered:
     T = 50
     N = [50]*T
-    FN_save = '../Results/clustered_kme/FinalData/'
-    FN_load = '../Results/clustered_kme/NaiveData/'
-    setting_range = np.linspace(0,5,21)
+    FN_save = s.FN_final_Clustered
+    FN_load = s.FN_model_Clustered
+    setting_range = s.setting_range_Clustered
     
 num_settings = len(setting_range)
 

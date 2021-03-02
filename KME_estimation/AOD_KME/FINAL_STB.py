@@ -1,8 +1,10 @@
 """
 ---------------------------------------------------
 This code is part of the AISTATS 2021 submission:
->>> High-Dimensional Multi-Task Averaging and 
-    Application to Kernel Mean Embedding <<<
+>>> Marienwald, Hannah, Fermanian, Jean-Baptiste & Blanchard, Gilles.
+    "High-Dimensional Multi-Task Averaging and Application to Kernel 
+    Mean Embedding." In International Conference on Artificial 
+    Intelligence and Statistics. PMLR, 2021. <<<
 ---------------------------------------------------
 FINAL_STB.py:
     - performs model optimization on part of the data to find optimal values
@@ -11,25 +13,28 @@ FINAL_STB.py:
 import sys
 sys.path.append('../')
 import utiels as u
+import AOD_settings as s
 import numpy as np
 import scipy.io as io
 
+unbiased    = s.unbiased            # unbiased estimation of the MMD^2
+replace     = s.replace             # replace negative values of MMD^2 with zero 
+save_neighs = s.save_neighs         # save info about found neighbors
+subsample_size  = s.subsample_size  # number of observations used to estimate the KMEs
+num_trials      = s.num_trials      # number of trials (repetitions of experiments)
+T_full  = s.T_full                  # number of bags (all)
+T_train = s.T_train                 # number of bags used for training
+T_test  = s.T_test                  # number of bags used for testing
+FN = s.FN_trial                     # where to store the results
+
 ### update as desired ########################################################
-unbiased    = True       # unbiased estimation of the MMD^2
-replace     = True       # replace negative values of MMD^2 with zero 
-save_neighs = True       # save the number of neighbors
-kw1_A           = 1.     # kernel width
-subsample_size  = 20     # number of observations used to estimate the KMEs
-num_trials      = 100    # number of trials (repetitions of experiments)
-T_full  = 800            # number of bags (all)
-T_train = 400            # number of bags used for training
-T_test  = 400            # number of bags used for testing
-
-FN = '../Results/aod_kme/TrialData/'    # where to store the results
-
-# value range that shall be tested for the model parameters
+# value range that shall be tested for the model parameters, 
+# for zeta = -1., stb = naive
+# for Gaussian kernel use, e.g.:
 num_modelparams = {'Zeta': 13}
 Zeta   = np.linspace(0.,3.0,num_modelparams['Zeta'])
+# for the linear kernel use, e.g.:
+#Zeta    = np.array([-1., 0, 0.25, 0.5, 0.75, 1., 1.25, 1.5, 1.75, 2.])
 ##############################################################################
 
 ### MODEL OPTIMIZATION #######################################################

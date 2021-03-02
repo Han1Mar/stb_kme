@@ -1,8 +1,10 @@
 """
 ---------------------------------------------------
 This code is part of the AISTATS 2021 submission:
->>> High-Dimensional Multi-Task Averaging and 
-    Application to Kernel Mean Embedding <<<
+>>> Marienwald, Hannah, Fermanian, Jean-Baptiste & Blanchard, Gilles.
+    "High-Dimensional Multi-Task Averaging and Application to Kernel 
+    Mean Embedding." In International Conference on Artificial 
+    Intelligence and Statistics. PMLR, 2021. <<<
 ---------------------------------------------------
 CLUSTERED_FINAL_naive.py:
     - creates the data for the final estimation of the generalized KME
@@ -11,31 +13,29 @@ CLUSTERED_FINAL_naive.py:
 import sys
 sys.path.append('../')
 import utiels as u
+import TOY_settings as s
 import numpy as np
 import os
 import scipy.io as io
 
 ### update as desired ########################################################
-unbiased    = True          # unbiased estimation of the MMD^2
-replace     = True          # replace negative values of MMD^2 with zero 
-kernel = u.Gaussiankernel   # kernel 
-kw1    = 2.25               # kernel width
-num_trials = 200            # number of trials
+unbiased    = s.unbiased         # unbiased estimation of the MMD^2
+replace     = s.replace          # replace negative values of MMD^2 with zero 
+kernel      = u.Gaussiankernel   # kernel 
+kw1         = s.kw1              # kernel width
+num_trials = s.num_trials_final  # number of trials
 
-FN_save = '../Results/clustered_kme/FinalData/' # where to save the data, results
-
-setting_range = np.linspace(0,5,21) # tested radius of circle on which the ...
-                                    # ... tasks lie equally spaced on
+FN_save = s.FN_final_Clustered      # where to save the data, results
+# tested radius of circle on which the tasks lie equally spaced on
+setting_range = s.setting_range_Clustered 
 num_settings  = len(setting_range)  # number of settings
-num_centroids = 5                   # number of centroids
+num_centroids = s.num_centroids_Clustered                  # number of centroids
 T       = 50                        # number of tasks (bags)
 N       = [50]*T                    # number of samples (train data) per task
-NZ      = int(1000)                 # number of sampler (test data) per task
+NZ      = s.NZ                      # number of sampler (test data) per task
 TperC   = int(T/num_centroids)      # number of tasks per centroid
 
-mu     = [0,0]                      # center of each task
-S      = np.array([[1,0],[0,10]])   # covariance matrix which will be ...
-                                    # ... randomly rotated
+S      = s.S    # covariance matrix which will be randomly rotated
 ##############################################################################
 
 KME_error  = {'Error': np.zeros(num_settings), 'std': np.zeros(num_settings)}

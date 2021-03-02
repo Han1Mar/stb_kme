@@ -2,7 +2,7 @@ function estim = basic_stein(X, m=0, sigma=1)
   %% Positive-part JS estimator
   %% X is a N x d data matrix
   %% Shrinkage towards m
-  %% sigma = noise variance
+  %% Sigma = noise variance
 
   [n,d] = size(X);
 
@@ -14,7 +14,7 @@ function estim = basic_stein(X, m=0, sigma=1)
 
   distsq = sum( (M-X).^2, 2);
 
-  shrink = (1 - (d-3)*(d>3)*sigma^2./distsq);
+  shrink = (1 - (d-3)*((d-3)>0)*sigma^2./distsq);
 
   shrink = shrink.*(shrink>0);
 
