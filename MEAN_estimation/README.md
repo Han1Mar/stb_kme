@@ -1,6 +1,6 @@
 # Estimation of High-Dimensional Means
 
-This code can be used to reproduce the experiments reported in **Section 8** of the Supplemental of    
+This code can be used to reproduce the experiments reported in **Section 8 of the Supplemental** of    
 > Marienwald, Hannah, Fermanian, Jean-Baptiste and Blanchard, Gilles. (2021). High-Dimensional Multi-Task Averaging and Application to Kernel Mean Embedding. In *International Conference on Artificial Intelligence and Statistics*, PMLR.
 ---
 
